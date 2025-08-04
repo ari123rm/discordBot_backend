@@ -26,7 +26,7 @@ const options = {
     },
     // O curinga '**/*.yaml' procura por todos os arquivos .yaml
     // dentro de 'src/routes' e seus subdiretórios.
-    apis: [path.join(__dirname, 'src', 'routes', '**', '*.yaml')],
+    apis: [path.join(__dirname, 'src', '**', '*.yaml')],
 };
 
 const swaggerSpec = swaggerJsdoc(options);

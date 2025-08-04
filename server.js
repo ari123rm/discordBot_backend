@@ -10,7 +10,7 @@ import swaggerSpec from './swagger.js';
 import {EXTERNAL_URL,PORT} from './src/env.js'; // Importa a configuração do ambiente
 
 // Importa o roteador principal que contém todas as rotas
-import allRoutes from './src/routes/index.js';
+import allRoutes from './src/routes.js';
 
 // Define __dirname para ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -35,4 +35,4 @@ app.use('/api', allRoutes); // Monta as rotas do arquivo index.js
 app.listen(PORT, () => {
   console.log(`Painel de controle rodando em ${EXTERNAL_URL}`);
   console.log(`API Docs no ${EXTERNAL_URL}/docs`);
-});
+});  

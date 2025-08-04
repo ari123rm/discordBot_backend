@@ -1,4 +1,8 @@
-# bot.yaml
+openapi: 3.0.0
+info:
+  title: Bot API
+  version: 1.0.0
+  description: API para controlar as operações do bot.
 
 paths:
   /bot/start-bot:
@@ -55,12 +59,23 @@ paths:
                   message:
                     type: string
                     example: 'Failed to stop bot.'
-  /bot/send-command:
+  /bot/send-command/{command}: # Caminho atualizado para incluir o parâmetro de comando
     post:
       summary: Envia um comando específico para o bot.
       tags:
         - Bot
-      description: Envia um comando em formato JSON para o bot executar.
+      description: Envia um comando em formato JSON para o bot executar, com o comando na URL.
+      parameters: # Definição do parâmetro de caminho
+        - in: path
+          name: command
+          schema:
+            type: string
+            enum:
+              - send_message
+              - kick_user
+              - ban_user
+          required: true
+          description: O comando a ser executado pelo bot.
       requestBody:
         required: true
         content:
@@ -68,13 +83,8 @@ paths:
             schema:
               type: object
               required:
-                - action
-                - data
+                - data # 'action' foi removido daqui
               properties:
-                action:
-                  type: string
-                  example: 'send_message'
-                  description: O comando a ser executado pelo bot.
                 data:
                   type: object
                   additionalProperties: true

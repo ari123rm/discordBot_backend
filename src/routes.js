@@ -1,7 +1,7 @@
 // routes/index.js
 
 import express from 'express';
-import botRoutes from './bot/bot.js';    // Importa as rotas do bot
+import botRoutes from './bot/routes/BotRoutes.js';    // Importa as rotas do bot
 //import userRoutes from './users.js';  // Importa as rotas de usuários (exemplo)
 
 const router = express.Router();

@@ -1,4 +1,5 @@
 import discord
+import sys
 from bot import bot
 
 @bot.tree.command()

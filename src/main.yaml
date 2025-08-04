@@ -2,7 +2,7 @@
 
 openapi: 3.0.0
 info:
-  title: Sua API Node.js
+  title: Discord Bot API
   version: 1.0.0
   description: Documentação de uma API simples para gerenciar o bot.
 servers:
