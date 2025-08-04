@@ -1,0 +1,15 @@
+# main.yaml
+
+openapi: 3.0.0
+info:
+  title: Sua API Node.js
+  version: 1.0.0
+  description: Documentação de uma API simples para gerenciar o bot.
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor de Desenvolvimento
+tags:
+  - name: Bot
+    description: Endpoints para gerenciar a operação do bot.
+paths:
+  $ref: './bot/bot.yaml'

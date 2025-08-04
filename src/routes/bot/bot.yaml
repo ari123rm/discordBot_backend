@@ -1,0 +1,99 @@
+# bot.yaml
+
+paths:
+  /bot/start-bot:
+    get:
+      summary: Inicia a operação do bot.
+      tags:
+        - Bot
+      description: Envia um comando para iniciar a funcionalidade principal do bot.
+      responses:
+        "200":
+          description: Bot iniciado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Bot started successfully.'
+        "500":
+          description: Erro ao iniciar o bot.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Failed to start bot.'
+  /bot/stop-bot:
+    get:
+      summary: Para a operação do bot.
+      tags:
+        - Bot
+      description: Envia um comando para parar a funcionalidade do bot.
+      responses:
+        "200":
+          description: Bot parado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Bot stopped successfully.'
+        "500":
+          description: Erro ao parar o bot.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Failed to stop bot.'
+  /bot/send-command:
+    post:
+      summary: Envia um comando específico para o bot.
+      tags:
+        - Bot
+      description: Envia um comando em formato JSON para o bot executar.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action
+                - data
+              properties:
+                action:
+                  type: string
+                  example: 'send_message'
+                  description: O comando a ser executado pelo bot.
+                data:
+                  type: object
+                  additionalProperties: true
+                  example:
+                    channel_id: '123456789'
+                    message: 'Hello, world!'
+                  description: Dados adicionais necessários para o comando.
+      responses:
+        "200":
+          description: Comando enviado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Command sent successfully.'
+        "400":
+          description: Requisição inválida. O comando não foi fornecido.
+        "500":
+          description: Erro ao enviar o comando.

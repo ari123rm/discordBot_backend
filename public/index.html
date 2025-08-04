@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle do Bot</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .card { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        #status { font-weight: bold; }
+        input, button { padding: 8px; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Painel de Controle do Bot</h1>
+
+    <div class="card">
+        <h2>Controle do Processo</h2>
+        <button id="startButton">Iniciar Bot</button>
+        <p>Status: <span id="status">Parado</span></p>
+    </div>
+
+    <div class="card">
+        <h2>Enviar Comando</h2>
+        <form id="commandForm">
+            <label for="channelId">ID do Canal:</label><br>
+            <input type="text" id="channelId" name="channelId" required><br><br>
+
+            <label for="message">Mensagem:</label><br>
+            <input type="text" id="message" name="message" required><br><br>
+
+            <button type="submit">Enviar Mensagem para o Canal</button>
+        </form>
+        <p id="commandStatus"></p>
+    </div>
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const statusSpan = document.getElementById('status');
+        const commandForm = document.getElementById('commandForm');
+        const commandStatus = document.getElementById('commandStatus');
+
+        startButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/start-bot');
+                const result = await response.json();
+                alert(result.message);
+                if (response.ok) {
+                    statusSpan.textContent = 'Rodando';
+                    statusSpan.style.color = 'green';
+                }
+            } catch (error) {
+                alert('Erro ao tentar iniciar o bot.');
+            }
+        });
+
+        commandForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Impede o recarregamento da página
+
+            const channelId = document.getElementById('channelId').value;
+            const message = document.getElementById('message').value;
+
+            const payload = {
+                action: 'send_message', // A 'ação' que o bot Python vai reconhecer
+                data: {
+                    channel_id: channelId,
+                    message: message
+                }
+            };
+
+            try {
+                const response = await fetch('/send-command', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                commandStatus.textContent = `Resposta do servidor: ${result.message}`;
+            } catch (error) {
+                commandStatus.textContent = 'Erro ao enviar comando.';
+            }
+        });
+    </script>
+</body>
+</html>
