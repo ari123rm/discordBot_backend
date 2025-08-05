@@ -1,11 +1,6 @@
-import discord
-import sys
+
 from bot import bot
-import logs  # Importa o módulo de logs para usar as funções de log
-
-
-# --- FUNÇÕES DE COMANDO DO BOT ---
-async def send_message_to_channel(data):
+async def send_message(data):
     """
     Função para enviar uma mensagem para um canal específico.
     Retorna um dicionário com o status da operação ou levanta uma exceção em caso de erro.
@@ -28,10 +23,3 @@ async def send_message_to_channel(data):
     except Exception as e:
         error_msg = f"Erro inesperado ao enviar mensagem: {e}"
         raise Exception(error_msg) # Levanta a exceção
-
-# --- DICIONÁRIO DE COMANDOS ---
-COMMANDS = {
-    'send_message': send_message_to_channel,
-    # Adicione outros comandos aqui
-    # 'kick_user': kick_user_function, 
-}

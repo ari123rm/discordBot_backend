@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get('/start-bot', BotController.startBot);
 router.get('/stop-bot', BotController.stopBot);
-router.post('/send-command/:command', BotController.sendCommand);
+router.post('/commands/:command', BotController.sendCommand);
+router.get('/commands',BotController.getCommands);
 
 export default router;

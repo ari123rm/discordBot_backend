@@ -191,7 +191,47 @@ const botService = {
             }
             throw new Error('Falha ao se comunicar com o bot.');
         }
-    }
+    },
+
+    async getCommands() {
+        if (!botProcess) {
+            throw new Error('O bot não está em execução.');
+        }
+        // Gera um ID de requisição único para rastrear a resposta
+        const requestId = crypto.randomUUID();
+        // Cria uma nova promessa que será resolvida ou rejeitada quando o bot responder
+        const promise = new Promise((resolve, reject) => {
+            // Armazena as funções resolve e reject no mapa de requisições pendentes
+            pendingRequests.set(requestId, { resolve, reject });
+
+            // Define um timeout para a requisição (ex: 10 segundos)
+            setTimeout(() => {
+                if (pendingRequests.has(requestId)) {
+                    pendingRequests.delete(requestId);
+                    reject(new Error(`Timeout: O bot não respondeu ao comando 'getCommands' (ID: ${requestId}) a tempo.`));
+                }
+            }, 10000); // 10 segundos de timeout
+        });
+        // Constrói o comando a ser enviado como uma string JSON, incluindo o requestId
+        const commandToSend = JSON.stringify({ action: 'getCommands', requestId });
+        try {
+            // Escreve o comando na entrada padrão do processo do bot
+            botProcess.stdin.write(commandToSend + '\n');
+            console.log(`Comando 'getCommands' enviado para o bot: ${commandToSend}`);
+            // Retorna a promessa. O controller aguardará por ela.
+            return promise;
+
+        } catch (error) {
+            console.error('Falha ao enviar comando para o bot:', error);
+            // Rejeita a promessa imediatamente se houver um erro de escrita no stdin
+            if (pendingRequests.has(requestId)) {
+                const { reject } = pendingRequests.get(requestId);
+                reject(new Error('Falha ao se comunicar com o bot.'));
+                pendingRequests.delete(requestId);
+            }
+            throw new Error('Falha ao se comunicar com o bot.');
+        }
+    },
 };
 
 export default botService;

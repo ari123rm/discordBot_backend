@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swagger.js'; 
 import {EXTERNAL_URL,PORT} from './src/env.js'; // Importa a configuração do ambiente
-
+import botService from './src/bot/BotService.js'; // Importa a função para iniciar o bot
 // Importa o roteador principal que contém todas as rotas
 import allRoutes from './src/routes.js';
 
@@ -30,6 +30,8 @@ app.get('/', (req, res) => {
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/api', allRoutes); // Monta as rotas do arquivo index.js
+
+botService.startBot();
 
 
 app.listen(PORT, () => {

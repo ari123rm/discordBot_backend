@@ -30,6 +30,15 @@ class BotController {
       res.status(500).json({ message: 'Error sending command', error: error.message });
     }
   }
+
+  static async getCommands(req, res) {
+    try {
+      const commands = await BotService.getCommands();
+      res.status(200).json({ message: 'Commands retrieved successfully', data: commands });
+    } catch (error) {
+      res.status(500).json({ message: 'Error retrieving commands', error: error.message });
+    }
+  }
 }
 
 export default BotController;

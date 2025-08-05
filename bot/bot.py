@@ -6,9 +6,18 @@ from discord.ext import commands
 load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
 
 
+#
+
+
+
+
 
 # --- CONFIGURAÇÃO BÁSICA DO BOT ---
 intents = discord.Intents.default()
 intents.message_content = True # Exemplo de intent
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot:commands.Bot = commands.Bot(command_prefix='!', intents=intents)
+
+async def setup_bot():
+    return
+
 BOT_TOKEN = os.getenv("DISCORD_TOKEN") # Coloque seu token aqui 

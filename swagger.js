@@ -13,9 +13,9 @@ const options = {
     swaggerDefinition: {
         openapi: '3.0.0',
         info: {
-            title: 'Sua API Node.js',
+            title: 'API do Bot Discord',
             version: '1.0.0',
-            description: 'Documentação de uma API simples para gerenciar o bot.',
+            description: 'API para controlar o bot do Discord via comandos HTTP',
         },
         servers: [
             {

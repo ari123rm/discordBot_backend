@@ -1,9 +1,3 @@
-openapi: 3.0.0
-info:
-  title: Bot API
-  version: 1.0.0
-  description: API para controlar as operações do bot.
-
 paths:
   /bot/start-bot:
     get:
@@ -59,21 +53,49 @@ paths:
                   message:
                     type: string
                     example: 'Failed to stop bot.'
-  /bot/send-command/{command}: # Caminho atualizado para incluir o parâmetro de comando
+  /bot/commands:
+    get:
+      summary: Obtém a lista de comandos disponíveis.
+      tags:
+        - Bot
+      description: Retorna uma lista de todos os comandos que o bot pode executar.
+      responses:
+        "200":
+          description: Lista de comandos obtida com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  commands:
+                    type: array
+                    items:
+                      type: string
+                    example: ['send_message', 'getCommands']
+        "500":
+          description: Erro ao obter a lista de comandos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Failed to retrieve commands.'
+  /bot/commands/{command}: 
     post:
       summary: Envia um comando específico para o bot.
       tags:
         - Bot
       description: Envia um comando em formato JSON para o bot executar, com o comando na URL.
-      parameters: # Definição do parâmetro de caminho
+      parameters: 
         - in: path
           name: command
           schema:
             type: string
             enum:
               - send_message
-              - kick_user
-              - ban_user
+              - getCommands
           required: true
           description: O comando a ser executado pelo bot.
       requestBody:
@@ -83,7 +105,7 @@ paths:
             schema:
               type: object
               required:
-                - data # 'action' foi removido daqui
+                - data 
               properties:
                 data:
                   type: object
@@ -107,3 +129,4 @@ paths:
           description: Requisição inválida. O comando não foi fornecido.
         "500":
           description: Erro ao enviar o comando.
+  

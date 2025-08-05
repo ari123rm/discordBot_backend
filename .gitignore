@@ -1,3 +1,5 @@
 node_modules/*
-bot/__pycache__/*
+**/__pycache__
+.pyc
 .env
+token.json

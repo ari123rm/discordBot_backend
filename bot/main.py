@@ -3,11 +3,18 @@ import asyncio
 import sys
 import threading
 import json
-from bot import bot, BOT_TOKEN  
-import commands_user
-import events  
+import os
 from logs import log_success, log_error, log_info, log_critical_error # Importa as funções de log
-from commands_back import COMMANDS  # Importa o dicionário de comandos
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+from bot import bot, BOT_TOKEN ,setup_bot
+from commands.commands_bot import load_commands, commands_bot
+from events.events import load_events, create_events_task
+from googleCalendar.calendar import calendar
+
+
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
 
 
 # --- FUNÇÃO QUE ESCUTA OS COMANDOS DO NODE.JS ---
@@ -35,8 +42,8 @@ def stdin_listener():
 
             log_info(f"Comando recebido: action={action}, data={data}, requestId={request_id}")
 
-            if action in COMMANDS:
-                coro = COMMANDS[action](data) # Chama a função de comando
+            if action in commands_bot['backend']:
+                coro = commands_bot['backend'][action](data) # Chama a função de comando
                 
                 # Executa a função assíncrona de forma segura na event loop principal do bot
                 future = asyncio.run_coroutine_threadsafe(coro, bot.loop)
@@ -68,8 +75,15 @@ def stdin_listener():
 
 @bot.event
 async def on_ready():
+    await load_commands('backend')  # Carrega os comandos do diretório 'backend'
+    await load_commands('discord')
+    await calendar()
+    #sincs = await bot.tree.sync()
+    #log_info(f'Comandos sincronizados: {len(sincs)}')
     log_info(f'Bot logado como {bot.user}')
     log_info('Bot está pronto para receber comandos do painel.')
+    await create_events_task()
+    # Inicia a tarefa de verificação de eventos
 
 # --- INICIALIZAÇÃO ---
 if __name__ == '__main__':
